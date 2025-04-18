@@ -9,9 +9,11 @@ public class GameManager
     public List<Map> Maps = new();
 
     public int CurrentMapIndex;
+    public Player Player;
 
-    public GameManager()
+    public GameManager(Player player)
     {
+        Player = player;
         CurrentMapIndex = 4; // index of Home
 
         // For each of the 9 maps, initialize in Maps List

@@ -1,6 +1,7 @@
 namespace Logic;
 
 public enum TerrainType { Home, Forest, River, Mountain_Cave, Timmy_Ranch, Town_Market }
+public enum Item { None, Player, Fish, Meat, Egg, Milk, Fruit, Vegetable, Water, Mineral, Stone }
 
 /// <summary>
 /// Record of Terrain templates to choose from
@@ -27,8 +28,8 @@ public static class Terrains
             "......................................................................".ToCharArray(),
             "......................................................................".ToCharArray(),
             "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
+            "............................◢■■■■■◣...................................".ToCharArray(),
+            "................................*.....................................".ToCharArray(),
             "......................................................................".ToCharArray(),
             "......................................................................".ToCharArray(),
             "......................................................................".ToCharArray(),
@@ -41,6 +42,24 @@ public static class Terrains
         };
 
         return lines;
+    }
+
+    public static string ItemToString(Item item)
+    {
+        return item switch
+        {
+            Item.None => ".",
+            Item.Player => "👤",
+            Item.Fish => "🐟",
+            Item.Meat => "🍖",
+            Item.Egg => "🥚",
+            Item.Milk => "🥛" ,
+            Item.Fruit => "🍊",
+            Item.Vegetable => "🥬",
+            Item.Water => "🪣",
+            Item.Mineral => "💎",
+            Item.Stone => "🪨",
+        };
     }
 }
 

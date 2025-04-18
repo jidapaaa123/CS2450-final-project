@@ -5,7 +5,7 @@ namespace Display;
 
 public class UI
 {
-    public static char PlayerIcon = 'O';
+
 
     public static string DisplayOfMap(Map mapObject)
     {

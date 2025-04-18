@@ -9,28 +9,10 @@ public class Map
 {
     public int MapIndex;
     TerrainType TerrainType;
-    public char[][] Blocks
-    {
-        get
-        {
-            if (PlayerPosition.row == null || PlayerPosition.column == null)
-            {
-                return Blocks;
-            }
-
-            int row = PlayerPosition.row.Value;
-            int column = PlayerPosition.column.Value;
-            
-            var targetRow = Blocks[]
-            return Blocks[] = 
-        }
-        private set
-        {
-            Blocks = value;
-        }
-    }
+    public Block[][] Blocks;
 
     public (int? row, int? column) PlayerPosition;
+    public Block ItemCoveredByPlayer = new(Item.None);
 
     public Map(int mapIndex, (int?, int?) playerPosition)
     {
@@ -46,22 +28,37 @@ public class Map
 
     public void Move(int rowChange, int colChange, out int destinationMapIndex)
     {
+        if (PlayerPosition.row == null || PlayerPosition.column == null)
+        {
+            throw new NullReferenceException("The game thinks Player is not supposed to be on this Map and, thus, cannot move");
+        }
+        destinationMapIndex = MapIndex;
+
+        char itemCovered = ItemCoveredByPlayer;
+        (int oldRowNum, int oldColumnNum) = (PlayerPosition.row.Value, PlayerPosition.column.Value);
+
         PlayerPosition.row += rowChange;
         PlayerPosition.column += colChange;
 
-        
-        destinationMapIndex = MapIndex;
+        char itemToCover = Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value];
 
         if (PlayerPosition.row >= Terrains.Height || PlayerPosition.column >= Terrains.Width)
         {
             throw new NotImplementedException("Player should move to another map, but I didn't code that yet");
         }
 
-
+        // "Reveal" the item covered by the Player's previous position:
+        var oldRow = Blocks[oldRowNum];
+        oldRow[oldColumnNum] = ItemCoveredByPlayer;
+        // Update Player's icon to reflect movement
+        var newRow = Blocks[PlayerPosition.row.Value];
+        // newRow[PlayerPosition.column.Value] = PlayerIcon;
+        ItemCoveredByPlayer = itemToCover;
     }
 
     public void PlayerEntersMap(int previousMapIndex, (int row, int column) previousCoordinate)
     {
         PlayerPosition = (0, 0);
     }
+
 }
