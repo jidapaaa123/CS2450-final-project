@@ -10,9 +10,6 @@ public enum Item { None = -1, Player, Seafood, Carne, Egg, Leche, Fruit, Vegetab
 /// </summary>
 public static class Terrains
 {
-    public const int Width = 70;
-    public const int Height = 22;
-
     // % of each block spawning an item
     public const int ItemChance = 5;
 

@@ -1,5 +1,7 @@
 namespace Logic;
 
+public enum Action { Up, Left, Down, Right, Cook, Feed, Toggle_Inventory }
+
 public class Player
 {
     public const int InventoryLimit = 10;

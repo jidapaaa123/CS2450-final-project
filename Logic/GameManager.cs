@@ -17,32 +17,43 @@ public class GameManager
         CurrentMapIndex = 4; // index of Home
 
         // For each of the 9 maps, initialize in Maps List
-        for (int i = 0; i < mapsAmount; i++)
+        // Plop the player at starting place: Home (0,0)
+        for (int i = 0; i < 4; i++)
         {
             Maps.Add(new Map(i, (null, null)));
         }
-
-        // Plop the player at starting place: Home (0,0)
-        Maps[CurrentMapIndex].PlayerPosition = (0, 0);
-
+        Maps.Add(new Map(4, (0, 0)));
+        for (int i = 5; i < mapsAmount; i++)
+        {
+            Maps.Add(new Map(i, (null, null)));
+        }
     }
 
-    // public void MovePlayer(char input)
-    // {
-    //     input = char.ToUpper(input);
-    //     (int rowChange, int colChange) = input switch
-    //     {
-    //         'W' => (-1, 0),
-    //         'A' => (0, -1),
-    //         'S' => (1, 0),
-    //         'D' => (0, 1),
-    //         _ => throw new ArgumentException("Movement input invalid: Not WASD"),
-    //     };
+    public void ProcessAction(Action action)
+    {
+        if (new List<Action>() { Action.Up, Action.Left, Action.Down, Action.Right }.Contains(action))
+        {
+            processMovement(action);
+        }
+        else
+        {
+            throw new NotImplementedException($"Not ready to process action {action}");
+        }
+    }
 
-    //     Maps[CurrentMapIndex].Move(rowChange, colChange, out CurrentMapIndex);
+    private void processMovement(Action movement)
+    {
+        (int rowChange, int colChange) = movement switch
+        {
+            Action.Up => (-1, 0),
+            Action.Left => (0, -1),
+            Action.Down => (1, 0),
+            Action.Right => (0, 1),
+            _ => throw new ArgumentException("ProcessMovement(): Action not movement"),
+        };
 
-    //     throw new NotImplementedException("figure out player movement display");
+        Maps[CurrentMapIndex].Move(rowChange, colChange, out CurrentMapIndex);
+        //     throw new NotImplementedException("figure out player movement display");
 
-    // }
-
+    }
 }
