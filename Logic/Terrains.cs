@@ -1,7 +1,7 @@
 namespace Logic;
 
 public enum TerrainType { Home, Forest, River, Mountain_Cave, Timmy_Ranch, Town_Market }
-public enum Item { None, Player, Fish, Meat, Egg, Milk, Fruit, Vegetable, Water, Mineral, Stone }
+public enum Item { None = -1, Player, Seafood, Carne, Egg, Leche, Fruit, Vegetable, Water, Mineral, Rock }
 
 /// <summary>
 /// Record of Terrain templates to choose from
@@ -13,69 +13,160 @@ public static class Terrains
     public const int Width = 70;
     public const int Height = 22;
 
-    public static char[][] Home()
+    // % of each block spawning an item
+    public const int ItemChance = 5;
+
+    private static readonly Dictionary<int, TerrainType> IndexToTerrainType = new Dictionary<int, TerrainType>
     {
-        var lines = new char[][] {
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "............................◢■■■■■◣...................................".ToCharArray(),
-            "................................*.....................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-            "......................................................................".ToCharArray(),
-
-        };
-
-        return lines;
+        { 0, TerrainType.Forest },
+        { 1, TerrainType.River },
+        { 2, TerrainType.Mountain_Cave },
+        { 3, TerrainType.River },
+        { 4, TerrainType.Home },
+        { 5, TerrainType.Forest },
+        { 6, TerrainType.Timmy_Ranch },
+        { 7, TerrainType.Timmy_Ranch },
+        { 8, TerrainType.Town_Market }
+    };
+    public static TerrainType MapIndextoTerrainType(int index)
+    {
+        if (IndexToTerrainType.TryGetValue(index, out TerrainType terrain))
+        {
+            return terrain;
+        }
+        else
+        {
+            throw new ArgumentException($"Invalid map index: {index}");
+        }
     }
 
-    public static string ItemToString(Item item)
+    private static readonly Dictionary<Item, char> ItemToSymbol = new Dictionary<Item, char>
     {
-        return item switch
+        { Item.None, '.' },
+        { Item.Player, '@' },
+        { Item.Seafood, 'S' },
+        { Item.Carne, 'C' },
+        { Item.Egg, 'E' },
+        { Item.Leche, 'L' },
+        { Item.Fruit, 'F' },
+        { Item.Vegetable, 'V' },
+        { Item.Water, 'W' },
+        { Item.Mineral, 'M' },
+        { Item.Rock, 'R' }
+    };
+    public static char GetItemSymbol(Item item)
+    {
+        if (ItemToSymbol.TryGetValue(item, out char symbol))
         {
-            Item.None => ".",
-            Item.Player => "👤",
-            Item.Fish => "🐟",
-            Item.Meat => "🍖",
-            Item.Egg => "🥚",
-            Item.Milk => "🥛" ,
-            Item.Fruit => "🍊",
-            Item.Vegetable => "🥬",
-            Item.Water => "🪣",
-            Item.Mineral => "💎",
-            Item.Stone => "🪨",
+            return symbol;
+        }
+        else
+        {
+            throw new ArgumentException($"Item {item} has no symbol associated");
+        }
+    }
+
+    public static char[][] GenerateTerrain(TerrainType type)
+    {
+        if (type == TerrainType.Home)
+        {
+            return new char[][] {
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "..........................／l、.......................".ToCharArray(),
+                "........................（ﾟ､ ｡７......................".ToCharArray(),
+                "..........................l、ﾞ~ヽ.....................".ToCharArray(),
+                "..........................じしf_, )ノ.................".ToCharArray(),
+                "..........................◢■■■■■◣.....................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+            };
+        }
+        else
+        {
+            var lines = new char[][] {
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+                "......................................................".ToCharArray(),
+            };
+
+            // Populate Terrain
+            for (int i = 0; i < lines.Length; i++)
+            {
+                char[] row = lines[i];
+
+                for (int j = 0; j < row.Length; j++)
+                {
+                    bool hasItem = Random.Shared.Next(100) < ItemChance;
+                    if (!hasItem)
+                    {
+                        continue;
+                    }
+
+                    // pick from the item pool
+                    List<Item> itemPool = ItemTypesInTerrain(type);
+                    int rand = Random.Shared.Next(itemPool.Count);
+
+                    char itemIcon = GetItemSymbol(itemPool[rand]);
+                    lines[i][j] = itemIcon;
+                }
+            }
+
+            return lines;
+        }
+    }
+
+    public static List<Item> ItemTypesInTerrain(TerrainType type)
+    {
+        if (type == TerrainType.Home)
+        {
+            throw new ArgumentException("You're not supposed to call this method for Home");
+        }
+
+        return type switch
+        {
+            TerrainType.River => new List<Item>() { Item.Seafood, Item.Water },
+            TerrainType.Timmy_Ranch => new List<Item>() { Item.Carne, Item.Egg, Item.Leche },
+            TerrainType.Town_Market => new List<Item>() { Item.Fruit, Item.Vegetable },
+            TerrainType.Forest => new List<Item>() { Item.Water, Item.Fruit, Item.Vegetable },
+            TerrainType.Mountain_Cave => new List<Item>() { Item.Mineral, Item.Rock, Item.Water },
         };
     }
 }
 
 // MAP ASCII DESIGN
-// Cat
-//  ...............................
-//  .............／l、..............
-//  ...........（ﾟ､ ｡７.............
-//  .............l、ﾞ~ヽ............
-//  .............じしf_, )ノ........
-//  ............ ◢■■■■■◣..........
-//  ...............................
-//  ...............................
-//  ...............................
-//  ...............................
-//  ...............................
 // Chest
 //  ...............................
 //  ............--------............

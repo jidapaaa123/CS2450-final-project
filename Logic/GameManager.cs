@@ -27,22 +27,22 @@ public class GameManager
 
     }
 
-    public void MovePlayer(char input)
-    {
-        input = char.ToUpper(input);
-        (int rowChange, int colChange) = input switch
-        {
-            'W' => (-1, 0),
-            'A' => (0, -1),
-            'S' => (1, 0),
-            'D' => (0, 1),
-            _ => throw new ArgumentException("Movement input invalid: Not WASD"),
-        };
+    // public void MovePlayer(char input)
+    // {
+    //     input = char.ToUpper(input);
+    //     (int rowChange, int colChange) = input switch
+    //     {
+    //         'W' => (-1, 0),
+    //         'A' => (0, -1),
+    //         'S' => (1, 0),
+    //         'D' => (0, 1),
+    //         _ => throw new ArgumentException("Movement input invalid: Not WASD"),
+    //     };
 
-        Maps[CurrentMapIndex].Move(rowChange, colChange, out CurrentMapIndex);
+    //     Maps[CurrentMapIndex].Move(rowChange, colChange, out CurrentMapIndex);
 
-        throw new NotImplementedException("figure out player movement display");
+    //     throw new NotImplementedException("figure out player movement display");
 
-    }
+    // }
 
 }

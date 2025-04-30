@@ -6,8 +6,19 @@ namespace Display;
 public class UI
 {
 
+    public static void PrintScreenHeader(Map map)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("------------------------------------------------------");
+        Console.ForegroundColor = ConsoleColor.Gray;
 
-    public static string DisplayOfMap(Map mapObject)
+        Console.WriteLine($"Map {map.MapIndex}: {map.TerrainType}");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("------------------------------------------------------");
+        Console.ForegroundColor = ConsoleColor.Gray;
+    }
+
+    public static void PrintMapDisplay(Map mapObject)
     {
         StringBuilder builder = new();
 
@@ -18,6 +29,6 @@ public class UI
             builder.AppendLine(currentLine);
         }
 
-        return builder.ToString();
+        Console.WriteLine(builder);
     }
 }
