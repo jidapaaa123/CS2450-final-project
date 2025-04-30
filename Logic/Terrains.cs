@@ -37,21 +37,23 @@ public static class Terrains
         }
     }
 
-    private static readonly Dictionary<Item, char> ItemToSymbol = new Dictionary<Item, char>
-    {
-        { Item.None, '.' },
-        { Item.Player, '@' },
-        { Item.Seafood, 'S' },
-        { Item.Carne, 'C' },
-        { Item.Egg, 'E' },
-        { Item.Leche, 'L' },
-        { Item.Fruit, 'F' },
-        { Item.Vegetable, 'V' },
-        { Item.Water, 'W' },
-        { Item.Mineral, 'M' },
-        { Item.Rock, 'R' }
-    };
-    public static char GetItemSymbol(Item item)
+    private static readonly Dictionary<Item, char> ItemToSymbol =
+        new Dictionary<Item, char>
+        {
+            { Item.None, '.' },
+            { Item.Player, '@' },
+            { Item.Seafood, 'S' },
+            { Item.Carne, 'C' },
+            { Item.Egg, 'E' },
+            { Item.Leche, 'L' },
+            { Item.Fruit, 'F' },
+            { Item.Vegetable, 'V' },
+            { Item.Water, 'W' },
+            { Item.Mineral, 'M' },
+            { Item.Rock, 'R' }
+        };
+
+    public static char GetSymbolFromItem(Item item)
     {
         if (ItemToSymbol.TryGetValue(item, out char symbol))
         {
@@ -59,7 +61,22 @@ public static class Terrains
         }
         else
         {
-            throw new ArgumentException($"Item {item} has no symbol associated");
+            throw new KeyNotFoundException($"Item {item} has no symbol associated");
+        }
+    }
+
+    public static readonly Dictionary<char, Item> SymbolToItem =
+        ItemToSymbol.ToDictionary(pair => pair.Value, pair => pair.Key);
+
+    public static Item GetItemFromSymbol(char symbol)
+    {
+        if (SymbolToItem.TryGetValue(symbol, out Item item))
+        {
+            return item;
+        }
+        else
+        {
+            throw new KeyNotFoundException($"Symbol {symbol} has no item associated");
         }
     }
 
@@ -136,7 +153,7 @@ public static class Terrains
                     List<Item> itemPool = ItemTypesInTerrain(type);
                     int rand = Random.Shared.Next(itemPool.Count);
 
-                    char itemIcon = GetItemSymbol(itemPool[rand]);
+                    char itemIcon = GetSymbolFromItem(itemPool[rand]);
                     lines[i][j] = itemIcon;
                 }
             }

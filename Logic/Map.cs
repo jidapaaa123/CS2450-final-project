@@ -36,7 +36,7 @@ public class Map
 
         PlayerPosition = playerPosition;
 
-        if (PlayerPosition.row != null && PlayerPosition.column != null)
+        if (!PositionIsNull())
         {
             Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value] = '@';
         }
@@ -44,7 +44,7 @@ public class Map
 
     public void Move(int rowChange, int colChange, out int destinationMapIndex)
     {
-        if (PlayerPosition.row == null || PlayerPosition.column == null)
+        if (PositionIsNull())
         {
             throw new NullReferenceException("The game thinks Player is not supposed to be on this Map and, thus, cannot move");
         }
@@ -82,4 +82,27 @@ public class Map
         PlayerPosition = (0, 0);
     }
 
+    /// <summary>
+    /// "Will the player go into a solid block if the game lets him move where he wants?"
+    /// </summary>
+    /// <param name="desiredDirection"></param>
+    /// <returns></returns>
+    public bool WillCollide(int rowChange, int colChange)
+    {
+        if (PositionIsNull())
+        {
+            throw new NullReferenceException("Player can't collide... the game thinks");
+        }
+
+        char destination = Blocks[PlayerPosition.row!.Value + rowChange][PlayerPosition.column!.Value + colChange];
+
+        // if it's not an "item", then it's a solid block
+        // if it's not an item -> player will collide
+        return !Terrains.SymbolToItem.ContainsKey(destination);
+    }
+
+    private bool PositionIsNull()
+    {
+        return PlayerPosition.row == null || PlayerPosition.column == null;
+    }
 }

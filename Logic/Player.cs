@@ -12,4 +12,9 @@ public class Player
     {
         Name = name;
     }
+
+    public static bool ActionIsMovement(Action action)
+    {
+        return new List<Action>() { Action.Up, Action.Left, Action.Down, Action.Right }.Contains(action);
+    }
 }

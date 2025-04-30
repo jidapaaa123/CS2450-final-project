@@ -34,6 +34,18 @@ public class UI
         Console.ForegroundColor = ConsoleColor.Gray;
     }
 
+    public static void PrintScreenFooter(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("------------------------------------------------------");
+        Console.ForegroundColor = ConsoleColor.Gray;
+
+        Console.WriteLine($"MESSAGE: {message}");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("------------------------------------------------------");
+        Console.ForegroundColor = ConsoleColor.Gray;
+    }
+
     public static void PrintMapDisplay(Map mapObject)
     {
         StringBuilder builder = new();

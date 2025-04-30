@@ -31,7 +31,7 @@ public class GameManager
 
     public void ProcessAction(Action action)
     {
-        if (new List<Action>() { Action.Up, Action.Left, Action.Down, Action.Right }.Contains(action))
+        if (Player.ActionIsMovement(action))
         {
             processMovement(action);
         }
@@ -52,8 +52,13 @@ public class GameManager
             _ => throw new ArgumentException("ProcessMovement(): Action not movement"),
         };
 
-        Maps[CurrentMapIndex].Move(rowChange, colChange, out CurrentMapIndex);
-        //     throw new NotImplementedException("figure out player movement display");
+        if (Maps[CurrentMapIndex].WillCollide(rowChange, colChange))
+        {
+            throw new SolidObjectCollisionException("Movement into solid object not allowed");
+        }
 
+        Maps[CurrentMapIndex].Move(rowChange, colChange, out CurrentMapIndex);
     }
+
+
 }
