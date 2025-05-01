@@ -20,7 +20,7 @@ public static class Kitchen
         {Item.Fried_Fish, [Item.Seafood, Item.Egg, Item.Flour, Item.Salt]},
         {Item.Noodles, [Item.Flour, Item.Egg]},
         {Item.Garfield_Spaghetti, [Item.Noodles, Item.Carne, Item.Vegetable]},
-        {Item.Raw_Egg_Water, [Item.Water, Item.Egg, Item.Egg, Item.Egg, Item.Egg, 
+        {Item.Raw_Egg_Water, [Item.Water, Item.Carne, Item.Egg, Item.Egg, Item.Egg, Item.Egg, 
                           Item.Egg, Item.Egg, Item.Egg, Item.Egg, Item.Egg, 
                           Item.Egg, Item.Egg, Item.Egg]}
     };
