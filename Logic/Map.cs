@@ -90,6 +90,13 @@ public class Map
         // ItemCoveredByPlayer = itemToCover;
     }
 
+    public void PlayerLeavesMap()
+    {
+        (int? oldRow, int? oldCol) = PlayerPosition;
+        PlayerPosition = (null, null);
+        Blocks[oldRow.Value][oldCol.Value] = '.';
+    }
+
     public void PlayerEntersMap((int? row, int? column) previousCoordinate, Action movementToGetHere)
     {
         if (PositionIsNull(previousCoordinate))
@@ -117,6 +124,7 @@ public class Map
                 break;
         }
 
+        Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value] = '@';
     }
 
     /// <summary>

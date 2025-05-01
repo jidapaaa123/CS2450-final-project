@@ -61,14 +61,11 @@ public class GameManager
             (int?, int?) currentCoordinate = Maps[CurrentMapIndex].PlayerPosition;
 
             // Player is no longer in old map:
-            Maps[CurrentMapIndex].PlayerPosition = (null, null);
+            Maps[CurrentMapIndex].PlayerLeavesMap();
 
             // Player is in new map:
             CurrentMapIndex = mapIndex;
             Maps[CurrentMapIndex].PlayerEntersMap(currentCoordinate, movement);
-
-
-
         }
         else
         {
