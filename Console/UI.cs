@@ -133,7 +133,7 @@ public class UI
 
             Console.WriteLine($"Cat's Request: {manager.RequestedFood}");
             Console.WriteLine($"Inventory: {Player.NumberOfItemsAsString(manager.Player.GetAmountsOfItems())}");
-            Console.WriteLine("What'd you like to make?");
+            Console.WriteLine("\nWhat'd you like to make?");
 
             Console.WriteLine($"0. Nothing... I changed my mind");
             for (int i = 0; i < Kitchen.AllCraftables.Length; i++)
