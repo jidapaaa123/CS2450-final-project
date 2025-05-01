@@ -1,3 +1,4 @@
+using System.Text;
 using Persistence;
 namespace Logic;
 
@@ -17,4 +18,19 @@ public static class Kitchen
         Item.Steak,
         Item.Fried_Chicken,
     };
+
+    public static string StringifyIngredients(Item dish)
+    {
+        Item[] ingredients = Recipes[dish];
+
+        StringBuilder builder = new();
+        builder.Append('(');
+        foreach(var ingredient in ingredients)
+        {
+            builder.Append($"{ingredient}, ");
+        }
+
+        string str = builder.ToString().TrimEnd().TrimEnd(',') + ')';
+        return str;
+    }
 }

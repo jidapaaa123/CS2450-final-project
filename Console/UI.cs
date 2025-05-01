@@ -100,7 +100,8 @@ public class UI
         }
         else if (action == Logic.Action.Cook)
         {
-            throw new NotImplementedException($"Not ready to process action Cook");
+            PrintCookingUI(manager);
+            // throw new NotImplementedException($"Not ready to process action Cook");
         }
         else // Feed
         {
@@ -108,9 +109,54 @@ public class UI
         }
     }
 
-    public static void PrintCookingUI()
+    public static void PrintCookingUI(GameManager manager)
     {
         Console.Clear();
         Console.WriteLine("KITCHEN");
+        Console.WriteLine($"Cat's Request: {manager.RequestedFood} {Kitchen.StringifyIngredients(manager.RequestedFood)}");
+        Console.WriteLine("Inventory: uh, something");
+        Console.WriteLine("What'd you like to make?");
+
+        Console.WriteLine($"0. Nothing... I changed my mind");
+        for (int i = 0; i < Kitchen.FoodList.Length; i++)
+        {
+            Item item = Kitchen.FoodList[i];
+            Console.WriteLine($"{i + 1}. {item}");
+        }
+
+        int number = GetInt(0, Kitchen.FoodList.Length);
+        if (number == 0)
+        {
+            return;
+        }
+        else
+        {
+            throw new NotImplementedException("uhhh");
+        }
+        Item selectedDish = Kitchen.FoodList[number];
     }
+
+    public static int GetInt(int min, int max)
+    {
+        while (true)
+        {
+            Console.Write("Enter number to select: ");
+            string? input = Console.ReadLine();
+
+            if (!int.TryParse(input, out int num))
+            {
+                Console.WriteLine("Not a number!\n");
+            }
+            else if (num >= min && num <= max)
+            {
+                return num;
+            }
+            else
+            {
+                Console.WriteLine($"Must be in [{min}, {max}]!\n");
+            }
+        }
+    }
+
+
 }
