@@ -83,9 +83,9 @@ public class GameManager
         Player.Inventory.Remove(RequestedFood);
 
         // Generate a new request
-        int rand = Random.Shared.Next(Kitchen.FoodList.Length);
-        RequestedFood = Kitchen.FoodList[rand];
-        
+        int rand = Random.Shared.Next(Kitchen.EdibleFoodList.Length);
+        RequestedFood = Kitchen.EdibleFoodList[rand];
+
         return true;
     }
 

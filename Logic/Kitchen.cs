@@ -4,7 +4,7 @@ namespace Logic;
 
 public static class Kitchen
 {
-    public static readonly Dictionary<Item, Item[]> Recipes = new()
+    public static readonly Dictionary<Item, Item[]> CraftableRecipes = new()
     {
         {Item.Flour, [Item.Vegetable, Item.Vegetable]},
         {Item.Bread, [Item.Flour, Item.Water]},
@@ -13,26 +13,13 @@ public static class Kitchen
         {Item.Salt, [Item.Mineral, Item.Rock]},
     };
 
-    public static readonly Item[] FoodList =
+    public static readonly Item[] AllCraftables = CraftableRecipes.Keys.ToArray();
+
+    public static readonly Item[] EdibleFoodList =
     {
         Item.Steak,
         Item.Fried_Chicken,
     };
-
-    public static string StringifyIngredients(Item dish)
-    {
-        Item[] ingredients = Recipes[dish];
-
-        StringBuilder builder = new();
-        builder.Append('(');
-        foreach (var ingredient in ingredients)
-        {
-            builder.Append($"{ingredient}, ");
-        }
-
-        string str = builder.ToString().TrimEnd().TrimEnd(',') + ')';
-        return str;
-    }
 
 
 }

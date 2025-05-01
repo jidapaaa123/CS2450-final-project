@@ -51,6 +51,23 @@ public class Player
         return builder.ToString().TrimEnd().TrimEnd(',');
     }
 
+    public static Dictionary<Item, int> OccurrencesOfItem(Item[] array)
+    {
+        Dictionary<Item, int> dict = new();
+        foreach (Item item in array)
+        {
+            if (!dict.ContainsKey(item))
+            {
+                dict.Add(item, 0);
+            }
+
+            dict[item]++;
+        }
+
+        return dict;
+    }
+
+
     public static string NumberOfItemsAsString(Dictionary<Item, int> dict)
     {
         StringBuilder builder = new();
@@ -82,7 +99,7 @@ public class Player
 
     public bool Cook(Item dish)
     {
-        Item[] ingredients = Kitchen.Recipes[dish];
+        Item[] ingredients = Kitchen.CraftableRecipes[dish];
         Dictionary<Item, int> amountsOfItems = GetAmountsOfItems();
 
         Dictionary<Item, int> amountsOfIngredients = new();
@@ -119,7 +136,7 @@ public class Player
             Item item = pair.Key;
             int amount = pair.Value;
 
-            for(int i = 0; i < amount; i++)
+            for (int i = 0; i < amount; i++)
             {
                 Inventory.Remove(item);
             }

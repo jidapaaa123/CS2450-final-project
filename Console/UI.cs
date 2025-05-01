@@ -130,25 +130,27 @@ public class UI
         {
             Console.Clear();
             Console.WriteLine("KITCHEN");
-            Console.WriteLine($"Cat's Request: {manager.RequestedFood} {Kitchen.StringifyIngredients(manager.RequestedFood)}");
+
+            // This line below is so unreadable but I'm not gonna refactor it
+            Console.WriteLine($"Cat's Request: {manager.RequestedFood}");
             Console.WriteLine($"Inventory: {Player.NumberOfItemsAsString(manager.Player.GetAmountsOfItems())}");
             Console.WriteLine("What'd you like to make?");
 
             Console.WriteLine($"0. Nothing... I changed my mind");
-            for (int i = 0; i < Kitchen.FoodList.Length; i++)
+            for (int i = 0; i < Kitchen.AllCraftables.Length; i++)
             {
-                Item item = Kitchen.FoodList[i];
-                Console.WriteLine($"{i + 1}. {item.ToString().Replace('_', ' ')}");
+                Item item = Kitchen.AllCraftables[i];
+                Console.WriteLine($"{i + 1}. {item.ToString().Replace('_', ' ')} ({Player.NumberOfItemsAsString(Player.OccurrencesOfItem(Kitchen.CraftableRecipes[item]))})");
             }
 
-            int number = GetInt(0, Kitchen.FoodList.Length);
+            int number = GetInt(0, Kitchen.AllCraftables.Length);
             if (number == 0)
             {
                 return;
             }
             else
             {
-                Item selectedDish = Kitchen.FoodList[number - 1];
+                Item selectedDish = Kitchen.AllCraftables[number - 1];
                 bool cooked = manager.Player.Cook(selectedDish);
                 PrintCookingResult(selectedDish, cooked);
 
@@ -162,7 +164,7 @@ public class UI
     {
         while (true)
         {
-            Console.Write("Enter number to select: ");
+            Console.Write("\nEnter number to select: ");
             string? input = Console.ReadLine();
 
             if (!int.TryParse(input, out int num))
@@ -188,7 +190,7 @@ public class UI
             return;
         }
 
-        Item[] ingredients = Kitchen.Recipes[selectedDish];
+        Item[] ingredients = Kitchen.CraftableRecipes[selectedDish];
         Dictionary<Item, int> dict = new();
         foreach (Item item in ingredients)
         {

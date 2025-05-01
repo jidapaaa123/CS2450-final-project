@@ -1,2 +1,2 @@
-Fried_Chicken
-Leche,Seafood,Seafood,Water,Seafood,Water,Carne,Carne,Egg
+Steak
+Seafood,Seafood,Water,Water,Bread
