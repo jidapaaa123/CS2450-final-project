@@ -11,6 +11,22 @@ public class Player
     public const int InventoryLimit = 10;
     public string Name;
     public Queue<Item> Inventory = new();
+    public Dictionary<Item, int> GetAmountsOfItems()
+    {
+        Dictionary<Item, int> dict = new();
+        foreach (Item item in Inventory)
+        {
+            if (!dict.ContainsKey(item))
+            {
+                dict.Add(item, 0);
+            }
+
+            dict[item]++;
+        }
+
+        return dict;
+    }
+
 
     public Player(string name)
     {
@@ -32,7 +48,21 @@ public class Player
             builder.Append($"{item}, ");
         }
 
-        return builder.ToString().TrimEnd(' ').TrimEnd(',');
+        return builder.ToString().TrimEnd().TrimEnd(',');
+    }
+
+    public static string NumberOfItemsAsString(Dictionary<Item, int> dict)
+    {
+        StringBuilder builder = new();
+
+        foreach (KeyValuePair<Item, int> pair in dict)
+        {
+            var item = pair.Key;
+            var amount = pair.Value;
+            builder.Append($"{item} ({amount}), ");
+        }
+
+        return builder.ToString().TrimEnd().TrimEnd(',');
     }
 
     public void CollectItem(Item item)
@@ -48,6 +78,52 @@ public class Player
         }
 
         Inventory.Enqueue(item);
+    }
+
+    public bool Cook(Item dish)
+    {
+        Item[] ingredients = Kitchen.Recipes[dish];
+        Dictionary<Item, int> amountsOfItems = GetAmountsOfItems();
+
+        Dictionary<Item, int> amountsOfIngredients = new();
+        foreach (Item item in ingredients)
+        {
+            if (!amountsOfIngredients.ContainsKey(item))
+            {
+                amountsOfIngredients.Add(item, 0);
+            }
+
+            amountsOfIngredients[item]++;
+        }
+
+
+        foreach (var pair in amountsOfIngredients)
+        {
+            Item item = pair.Key;
+            int amount = pair.Value;
+
+            if (!amountsOfItems.ContainsKey(item))
+            {
+                return false;
+            }
+
+            if (amountsOfItems[item] < amount)
+            {
+                return false;
+            }
+        }
+
+        // can cook!
+        foreach (var pair in amountsOfIngredients)
+        {
+            Item item = pair.Key;
+            int amount = pair.Value;
+            amountsOfItems[item] -= amount;
+        }
+        CollectItem(dish);
+        return true;
+
+
 
     }
 }

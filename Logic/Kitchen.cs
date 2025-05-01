@@ -13,7 +13,7 @@ public static class Kitchen
         {Item.Salt, [Item.Mineral, Item.Rock]},
     };
 
-    public static readonly Item[] FoodList = 
+    public static readonly Item[] FoodList =
     {
         Item.Steak,
         Item.Fried_Chicken,
@@ -25,7 +25,7 @@ public static class Kitchen
 
         StringBuilder builder = new();
         builder.Append('(');
-        foreach(var ingredient in ingredients)
+        foreach (var ingredient in ingredients)
         {
             builder.Append($"{ingredient}, ");
         }
@@ -33,4 +33,6 @@ public static class Kitchen
         string str = builder.ToString().TrimEnd().TrimEnd(',') + ')';
         return str;
     }
+
+
 }

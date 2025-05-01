@@ -111,29 +111,36 @@ public class UI
 
     public static void PrintCookingUI(GameManager manager)
     {
-        Console.Clear();
-        Console.WriteLine("KITCHEN");
-        Console.WriteLine($"Cat's Request: {manager.RequestedFood} {Kitchen.StringifyIngredients(manager.RequestedFood)}");
-        Console.WriteLine("Inventory: uh, something");
-        Console.WriteLine("What'd you like to make?");
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("KITCHEN");
+            Console.WriteLine($"Cat's Request: {manager.RequestedFood} {Kitchen.StringifyIngredients(manager.RequestedFood)}");
+            Console.WriteLine($"Inventory: {Player.NumberOfItemsAsString(manager.Player.GetAmountsOfItems())}");
+            Console.WriteLine("What'd you like to make?");
 
-        Console.WriteLine($"0. Nothing... I changed my mind");
-        for (int i = 0; i < Kitchen.FoodList.Length; i++)
-        {
-            Item item = Kitchen.FoodList[i];
-            Console.WriteLine($"{i + 1}. {item}");
-        }
+            Console.WriteLine($"0. Nothing... I changed my mind");
+            for (int i = 0; i < Kitchen.FoodList.Length; i++)
+            {
+                Item item = Kitchen.FoodList[i];
+                Console.WriteLine($"{i + 1}. {item.ToString().Replace('_', ' ')}");
+            }
 
-        int number = GetInt(0, Kitchen.FoodList.Length);
-        if (number == 0)
-        {
-            return;
+            int number = GetInt(0, Kitchen.FoodList.Length);
+            if (number == 0)
+            {
+                return;
+            }
+            else
+            {
+                Item selectedDish = Kitchen.FoodList[number - 1];
+                bool cooked = manager.Player.Cook(selectedDish);
+                PrintCookingResult(selectedDish, cooked);
+
+                Console.WriteLine("\nPress any key to continue");
+                Console.ReadKey(true);
+            }
         }
-        else
-        {
-            throw new NotImplementedException("uhhh");
-        }
-        Item selectedDish = Kitchen.FoodList[number];
     }
 
     public static int GetInt(int min, int max)
@@ -155,6 +162,33 @@ public class UI
             {
                 Console.WriteLine($"Must be in [{min}, {max}]!\n");
             }
+        }
+    }
+
+    public static void PrintCookingResult(Item selectedDish, bool cooked)
+    {
+        if (!cooked)
+        {
+            Console.WriteLine("Oh... you're missing some ingredients!");
+            return;
+        }
+
+        Item[] ingredients = Kitchen.Recipes[selectedDish];
+        Dictionary<Item, int> dict = new();
+        foreach (Item item in ingredients)
+        {
+            if (!dict.ContainsKey(item))
+            {
+                dict.Add(item, 0);
+            }
+
+            dict[item]++;
+        }
+
+        Console.WriteLine($" + {selectedDish.ToString().Replace('_', ' ')}");
+        foreach (var pair in dict)
+        {
+            Console.WriteLine($" - {pair.Key} ({pair.Value})");
         }
     }
 
