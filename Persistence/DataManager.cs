@@ -11,7 +11,7 @@ public class DataManager
 {
     private static string storagePath = "../Persistence/data.txt";
 
-    public static void StoreData(Item requestedFood, Queue<Item> Inventory)
+    public static void StoreData(Item requestedFood, List<Item> Inventory)
     {
         var lines = new string[]
         {
@@ -22,32 +22,31 @@ public class DataManager
         File.WriteAllLines(storagePath, lines);
     }
 
-    public static (Item requestedFood, Queue<Item> inventory) LoadData()
+    public static (Item requestedFood, List<Item> inventory) LoadData()
     {
         var data = File.ReadAllLines(storagePath);
 
         Item requestedFood = Enum.Parse<Item>(data[0]);
 
-        Queue<Item> inventory = new();
+        List<Item> inventory = new();
         string[] items = data[1].Split(',');
 
-        foreach(var item in items)
+        foreach (var item in items)
         {
-            inventory.Enqueue(Enum.Parse<Item>(item));
+            inventory.Add(Enum.Parse<Item>(item));
         }
 
         return (requestedFood, inventory);
     }
 
-    public static string StringifyInventory(Queue<Item> inventory)
+    public static string StringifyInventory(List<Item> inventory)
     {
         StringBuilder builder = new();
-        while(inventory.Count > 0)
+        foreach (var item in inventory)
         {
-            Item item = inventory.Dequeue();
             builder.Append($"{item},");
         }
-        
+
         return builder.ToString().TrimEnd(',');
     }
 

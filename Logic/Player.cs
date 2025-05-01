@@ -10,7 +10,7 @@ public class Player
 {
     public const int InventoryLimit = 10;
     public string Name;
-    public Queue<Item> Inventory = new();
+    public List<Item> Inventory = new();
     public Dictionary<Item, int> GetAmountsOfItems()
     {
         Dictionary<Item, int> dict = new();
@@ -31,7 +31,7 @@ public class Player
     public Player(string name)
     {
         Name = name;
-        Inventory.Enqueue(Item.Water);
+        Inventory.Add(Item.Water);
     }
 
     public static bool ActionIsMovement(Action action)
@@ -74,10 +74,10 @@ public class Player
 
         if (Inventory.Count == InventoryLimit)
         {
-            Inventory.Dequeue();
+            Inventory.RemoveAt(0);
         }
 
-        Inventory.Enqueue(item);
+        Inventory.Add(item);
     }
 
     public bool Cook(Item dish)
@@ -118,7 +118,11 @@ public class Player
         {
             Item item = pair.Key;
             int amount = pair.Value;
-            amountsOfItems[item] -= amount;
+
+            for(int i = 0; i < amount; i++)
+            {
+                Inventory.Remove(item);
+            }
         }
         CollectItem(dish);
         return true;
