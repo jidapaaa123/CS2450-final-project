@@ -1,5 +1,6 @@
 using System.Text;
 using Logic;
+using Persistence;
 
 namespace Display;
 
@@ -17,7 +18,7 @@ public class UI
         ConsoleKey.D,
         ConsoleKey.E, // Cook
         ConsoleKey.F, // Feed
-        ConsoleKey.Q, // Inventory
+        ConsoleKey.Escape, // Quit
     };
 
 
@@ -30,6 +31,8 @@ public class UI
 
         Console.WriteLine($"Map {map.MapIndex}: {map.TerrainType}");
         Console.WriteLine($"Inventory: {manager.Player.InventoryAsString()}");
+        Console.WriteLine("▪ 'E' to Cook       ▪ 'F' to Feed     ▪ 'esc' to Quit ");
+
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("------------------------------------------------------");
@@ -66,7 +69,7 @@ public class UI
     {
         while (true)
         {
-            ConsoleKey key = Console.ReadKey().Key;
+            ConsoleKey key = Console.ReadKey(true).Key;
 
             if (actionInputs.Contains(key))
             {
@@ -78,7 +81,7 @@ public class UI
                     ConsoleKey.RightArrow or ConsoleKey.D => Logic.Action.Right,
                     ConsoleKey.E => Logic.Action.Cook,
                     ConsoleKey.F => Logic.Action.Feed,
-                    ConsoleKey.Q => Logic.Action.Toggle_Inventory,
+                    ConsoleKey.Escape => Logic.Action.Quit,
                 };
             }
         }
@@ -90,9 +93,24 @@ public class UI
         {
             manager.ProcessMovement(action);
         }
-        else
+        else if (action == Logic.Action.Quit)
         {
-            throw new NotImplementedException($"Not ready to process action {action}");
+            DataManager.StoreData(manager.RequestedFood, manager.Player.Inventory);
+            System.Environment.Exit(0);
         }
+        else if (action == Logic.Action.Cook)
+        {
+            throw new NotImplementedException($"Not ready to process action Cook");
+        }
+        else // Feed
+        {
+            throw new NotImplementedException($"Not ready to process action Feed");
+        }
+    }
+
+    public static void PrintCookingUI()
+    {
+        Console.Clear();
+        Console.WriteLine("KITCHEN");
     }
 }

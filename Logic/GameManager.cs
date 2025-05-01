@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using Persistence;
+
 
 namespace Logic;
 
@@ -10,6 +11,7 @@ public class GameManager
 
     public int CurrentMapIndex;
     public Player Player;
+    public Item RequestedFood;
 
     public GameManager(Player player)
     {
@@ -27,6 +29,13 @@ public class GameManager
         {
             Maps.Add(new Map(i, (null, null)));
         }
+
+        loadData();
+    }
+
+    private void loadData()
+    {
+        (RequestedFood, Player.Inventory) = DataManager.LoadData();
     }
 
     public void ProcessMovement(Action movement)

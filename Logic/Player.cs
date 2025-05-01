@@ -1,8 +1,10 @@
+using Persistence;
+
 using System.Text;
 
 namespace Logic;
 
-public enum Action { Up, Left, Down, Right, Cook, Feed, Toggle_Inventory }
+public enum Action { Up, Left, Down, Right, Cook, Feed, Quit }
 
 public class Player
 {
@@ -25,11 +27,11 @@ public class Player
     {
         StringBuilder builder = new();
 
-        foreach(var item in Inventory)
+        foreach (var item in Inventory)
         {
             builder.Append($"{item}, ");
         }
-        
+
         return builder.ToString().TrimEnd(' ').TrimEnd(',');
     }
 

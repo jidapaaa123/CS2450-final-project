@@ -1,7 +1,9 @@
+using Persistence;
+
 namespace Logic;
 
 public enum TerrainType { Home, Forest, River, Mountain_Cave, Timmy_Ranch, Town_Market }
-public enum Item { None = -1, Player, Seafood, Carne, Egg, Leche, Fruit, Vegetable, Water, Mineral, Rock }
+
 
 /// <summary>
 /// Record of Terrain templates to choose from

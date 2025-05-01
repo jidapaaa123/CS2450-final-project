@@ -1,6 +1,4 @@
-// NOTICE:
-// Currently defaulting every map to Home terrain
-// PlayerEntersMap() currently deals with Portals by setting player to the (0,0) locaton
+using Persistence;
 namespace Logic;
 
 
