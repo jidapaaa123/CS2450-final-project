@@ -30,6 +30,7 @@ public class UI
         Console.ForegroundColor = ConsoleColor.Gray;
 
         Console.WriteLine($"Map {map.MapIndex}: {map.TerrainType}");
+        Console.WriteLine($"Cat's Request: {manager.RequestedFood.ToString().Replace('_', ' ')}");
         Console.WriteLine($"Inventory: {manager.Player.InventoryAsString()}");
         Console.WriteLine("▪ 'E' to Cook       ▪ 'F' to Feed     ▪ 'esc' to Quit ");
 
@@ -45,7 +46,7 @@ public class UI
         Console.WriteLine("------------------------------------------------------");
         Console.ForegroundColor = ConsoleColor.Gray;
 
-        Console.WriteLine($"MESSAGE: {message}");
+        Console.WriteLine($"MESSAGE: \n{message}");
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("------------------------------------------------------");
         Console.ForegroundColor = ConsoleColor.Gray;
@@ -100,16 +101,30 @@ public class UI
         }
         else if (action == Logic.Action.Cook)
         {
-            PrintCookingUI(manager);
-            // throw new NotImplementedException($"Not ready to process action Cook");
+            ProcessCooking(manager);
         }
         else // Feed
         {
-            throw new NotImplementedException($"Not ready to process action Feed");
+            if (manager.CurrentMapIndex != 4)
+            {
+                throw new CannotFeedCatException("You must be home (Map 4) to feed your Cat!");
+            }
+
+            bool fed = manager.Feed();
+
+            if (!fed)
+            {
+                throw new CannotFeedCatException($"You don't have {manager.RequestedFood}!");
+            }
+            else
+            {
+                throw new HappyCatException("You fed Cat! It's very happy... but has biblical levels of greed\n" +
+                                            $"New Requested Food: {manager.RequestedFood.ToString().Replace('_', ' ')}");
+            }
         }
     }
 
-    public static void PrintCookingUI(GameManager manager)
+    public static void ProcessCooking(GameManager manager)
     {
         while (true)
         {

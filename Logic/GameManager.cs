@@ -73,6 +73,20 @@ public class GameManager
         Player.CollectItem(collectedItem);
     }
 
+    public bool Feed()
+    {
+        if (!Player.Inventory.Contains(RequestedFood))
+        {
+            return false;
+        }
 
+        Player.Inventory.Remove(RequestedFood);
+
+        // Generate a new request
+        int rand = Random.Shared.Next(Kitchen.FoodList.Length);
+        RequestedFood = Kitchen.FoodList[rand];
+        
+        return true;
+    }
 
 }

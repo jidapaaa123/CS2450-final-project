@@ -126,8 +126,5 @@ public class Player
         }
         CollectItem(dish);
         return true;
-
-
-
     }
 }

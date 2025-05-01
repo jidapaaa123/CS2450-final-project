@@ -35,3 +35,39 @@ public class GameBoundaryCollisionException : Exception
         
     }
 }
+
+public class CannotFeedCatException : Exception
+{
+    public CannotFeedCatException()
+    {
+
+    }
+
+    public CannotFeedCatException(string message) : base(message)
+    {
+
+    }
+
+    public CannotFeedCatException(string message, Exception inner) : base (message, inner)
+    {
+        
+    }
+}
+
+public class HappyCatException : Exception
+{
+    public HappyCatException()
+    {
+
+    }
+
+    public HappyCatException(string message) : base(message)
+    {
+
+    }
+
+    public HappyCatException(string message, Exception inner) : base (message, inner)
+    {
+        
+    }
+}

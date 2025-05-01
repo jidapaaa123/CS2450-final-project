@@ -18,8 +18,16 @@ while (true)
         UI.ProcessAction(action, manager);
         footerMessage = "";
     }
-    catch (SolidObjectCollisionException e)
+    catch (Exception ex)
     {
-        footerMessage = e.Message;
+        if (ex is SolidObjectCollisionException || ex is CannotFeedCatException || ex is HappyCatException)
+        {
+            footerMessage = ex.Message;
+        }
+        else
+        {
+            throw;
+        }
     }
+
 }
