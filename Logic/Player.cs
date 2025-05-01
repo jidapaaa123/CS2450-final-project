@@ -43,9 +43,15 @@ public class Player
     {
         StringBuilder builder = new();
 
-        foreach (var item in Inventory)
+        for (int i = 0; i < Inventory.Count; i++)
         {
+            Item item = Inventory[i];
             builder.Append($"{item}, ");
+
+            if (i % 4 == 0 && i != 0)
+            {
+                builder.Append("\n\t   ");
+            }
         }
 
         return builder.ToString().TrimEnd().TrimEnd(',');

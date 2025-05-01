@@ -5,7 +5,9 @@ namespace Persistence;
 public enum Item
 {
     None = -1, Player, Seafood, Carne, Egg, Leche, Fruit, Vegetable, Water, Mineral, Rock,
-    Flour, Bread, Steak, Fried_Chicken, Salt, Sugar
+    Flour, Bread, Steak, Fried_Chicken, Salt, Sugar, Sashimi,
+    Steak_Sandwich, Crispy_Chicken_Sandwich,
+    Waffle, Cornbread, Pancake, Fried_Fish
 }
 public class DataManager
 {
