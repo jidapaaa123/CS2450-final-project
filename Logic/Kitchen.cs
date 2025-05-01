@@ -17,7 +17,12 @@ public static class Kitchen
         {Item.Cornbread, [Item.Vegetable, Item.Flour, Item.Egg, Item.Leche, Item.Sugar]},
         {Item.Pancake, [Item.Flour, Item.Egg, Item.Leche, Item.Sugar]},
         {Item.Sashimi, [Item.Seafood, Item.Salt]},
-        {Item.Fried_Fish, [Item.Seafood, Item.Egg, Item.Flour, Item.Salt]}
+        {Item.Fried_Fish, [Item.Seafood, Item.Egg, Item.Flour, Item.Salt]},
+        {Item.Noodles, [Item.Flour, Item.Egg]},
+        {Item.Garfield_Spaghetti, [Item.Noodles, Item.Carne, Item.Vegetable]},
+        {Item.Raw_Egg_Water, [Item.Water, Item.Egg, Item.Egg, Item.Egg, Item.Egg, 
+                          Item.Egg, Item.Egg, Item.Egg, Item.Egg, Item.Egg, 
+                          Item.Egg, Item.Egg, Item.Egg]}
     };
 
     public static readonly Item[] AllCraftables = CraftableRecipes.Keys.ToArray();
@@ -27,6 +32,7 @@ public static class Kitchen
         Item.Bread, Item.Steak, Item.Fried_Chicken,
         Item.Steak_Sandwich, Item.Crispy_Chicken_Sandwich, 
         Item.Waffle, Item.Cornbread, Item.Pancake,
-        Item.Sashimi, Item.Fried_Fish,
+        Item.Sashimi, Item.Fried_Fish, Item.Noodles, Item.Garfield_Spaghetti,
+        Item.Raw_Egg_Water
     };
 }
