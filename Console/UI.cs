@@ -21,14 +21,16 @@ public class UI
     };
 
 
-    public static void PrintScreenHeader(Map map)
+    public static void PrintScreenHeader(GameManager manager)
     {
+        Map map = manager.Maps[manager.CurrentMapIndex];
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("------------------------------------------------------");
         Console.ForegroundColor = ConsoleColor.Gray;
 
         Console.WriteLine($"Map {map.MapIndex}: {map.TerrainType}");
-        Console.WriteLine($"Coordinate: {map.PlayerPosition}");
+        Console.WriteLine($"Inventory: {manager.Player.InventoryAsString()}");
+
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("------------------------------------------------------");
         Console.ForegroundColor = ConsoleColor.Gray;
@@ -79,6 +81,18 @@ public class UI
                     ConsoleKey.Q => Logic.Action.Toggle_Inventory,
                 };
             }
+        }
+    }
+
+    public static void ProcessAction(Logic.Action action, GameManager manager)
+    {
+        if (Player.ActionIsMovement(action))
+        {
+            manager.ProcessMovement(action);
+        }
+        else
+        {
+            throw new NotImplementedException($"Not ready to process action {action}");
         }
     }
 }

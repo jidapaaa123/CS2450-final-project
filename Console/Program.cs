@@ -7,7 +7,7 @@ string footerMessage = "";
 while (true)
 {
     Console.Clear();
-    UI.PrintScreenHeader(manager.Maps[manager.CurrentMapIndex]);
+    UI.PrintScreenHeader(manager);
     UI.PrintMapDisplay(manager.Maps[manager.CurrentMapIndex]);
     UI.PrintScreenFooter(footerMessage);
 
@@ -15,7 +15,7 @@ while (true)
     Logic.Action action = UI.GetAction();
     try
     {
-        manager.ProcessAction(action);
+        UI.ProcessAction(action, manager);
         footerMessage = "";
     }
     catch (SolidObjectCollisionException e)
