@@ -56,38 +56,22 @@ public class Map
         }
     }
 
-    public void Move(int rowChange, int colChange)
+    public void MoveWithinMap(int rowChange, int colChange, out Item collectedItem)
     {
         if (PositionIsNull(PlayerPosition))
         {
             throw new NullReferenceException("The game thinks Player is not supposed to be on this Map and, thus, cannot move");
         }
 
-        // char itemCovered = ItemCoveredByPlayer;
-        // (int oldRowNum, int oldColumnNum) = (PlayerPosition.row.Value, PlayerPosition.column.Value);
-
-
+        
         Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value] = '.';
 
         PlayerPosition.row += rowChange;
         PlayerPosition.column += colChange;
 
+        char symbol = Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value];
+        collectedItem = Terrains.GetItemFromSymbol(symbol);
         Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value] = '@';
-
-        // char itemToCover = Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value];
-
-        if (PlayerPosition.row >= Height || PlayerPosition.column >= Width)
-        {
-            throw new NotImplementedException("Player should move to another map, but I didn't code that yet");
-        }
-
-        // // "Reveal" the item covered by the Player's previous position:
-        // var oldRow = Blocks[oldRowNum];
-        // oldRow[oldColumnNum] = ItemCoveredByPlayer;
-        // // Update Player's icon to reflect movement
-        // var newRow = Blocks[PlayerPosition.row.Value];
-        // // newRow[PlayerPosition.column.Value] = PlayerIcon;
-        // ItemCoveredByPlayer = itemToCover;
     }
 
     public void PlayerLeavesMap()
@@ -97,7 +81,7 @@ public class Map
         Blocks[oldRow.Value][oldCol.Value] = '.';
     }
 
-    public void PlayerEntersMap((int? row, int? column) previousCoordinate, Action movementToGetHere)
+    public void PlayerEntersMap((int? row, int? column) previousCoordinate, Action movementToGetHere, out Item collectedItem)
     {
         if (PositionIsNull(previousCoordinate))
         {
@@ -124,6 +108,10 @@ public class Map
                 break;
         }
 
+        // report the item that the player just got on
+        char symbol = Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value];
+        collectedItem = Terrains.GetItemFromSymbol(symbol);
+        // step on the item
         Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value] = '@';
     }
 

@@ -29,19 +29,7 @@ public class GameManager
         }
     }
 
-    public void ProcessAction(Action action)
-    {
-        if (Player.ActionIsMovement(action))
-        {
-            processMovement(action);
-        }
-        else
-        {
-            throw new NotImplementedException($"Not ready to process action {action}");
-        }
-    }
-
-    private void processMovement(Action movement)
+    public void ProcessMovement(Action movement)
     {
         if (!Player.ActionIsMovement(movement))
         {
@@ -55,6 +43,7 @@ public class GameManager
             throw new SolidObjectCollisionException("Movement into solid object not allowed");
         }
 
+        Item collectedItem;
         // detect map changes
         if (mapIndex != CurrentMapIndex)
         {
@@ -65,15 +54,16 @@ public class GameManager
 
             // Player is in new map:
             CurrentMapIndex = mapIndex;
-            Maps[CurrentMapIndex].PlayerEntersMap(currentCoordinate, movement);
+            Maps[CurrentMapIndex].PlayerEntersMap(currentCoordinate, movement, out collectedItem);
         }
         else
         {
-            Maps[CurrentMapIndex].Move(rowChange, colChange);
+            Maps[CurrentMapIndex].MoveWithinMap(rowChange, colChange, out collectedItem);
         }
 
-
+        Player.CollectItem(collectedItem);
     }
+
 
 
 }
