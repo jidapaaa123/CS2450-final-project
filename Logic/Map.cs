@@ -26,6 +26,20 @@ public class Map
         }
     }
 
+    public static readonly Dictionary<int, Action[]> HittingWallMovements = new()
+    {
+        {0, [Action.Up, Action.Left]},
+        {1, [Action.Up]},
+        {2, [Action.Up, Action.Right]},
+        {3, [Action.Left]},
+        {4, []},
+        {5, [Action.Right]},
+        {6, [Action.Down, Action.Left]},
+        {7, [Action.Down]},
+        {8, [Action.Down, Action.Right]}
+    };
+
+
     public (int? row, int? column) PlayerPosition;
 
     public Map(int mapIndex, (int?, int?) playerPosition)
@@ -36,19 +50,18 @@ public class Map
 
         PlayerPosition = playerPosition;
 
-        if (!PositionIsNull())
+        if (!PositionIsNull(PlayerPosition))
         {
             Blocks[PlayerPosition.row.Value][PlayerPosition.column.Value] = '@';
         }
     }
 
-    public void Move(int rowChange, int colChange, out int destinationMapIndex)
+    public void Move(int rowChange, int colChange)
     {
-        if (PositionIsNull())
+        if (PositionIsNull(PlayerPosition))
         {
             throw new NullReferenceException("The game thinks Player is not supposed to be on this Map and, thus, cannot move");
         }
-        destinationMapIndex = MapIndex;
 
         // char itemCovered = ItemCoveredByPlayer;
         // (int oldRowNum, int oldColumnNum) = (PlayerPosition.row.Value, PlayerPosition.column.Value);
@@ -77,9 +90,33 @@ public class Map
         // ItemCoveredByPlayer = itemToCover;
     }
 
-    public void PlayerEntersMap(int previousMapIndex, (int row, int column) previousCoordinate)
+    public void PlayerEntersMap((int? row, int? column) previousCoordinate, Action movementToGetHere)
     {
-        PlayerPosition = (0, 0);
+        if (PositionIsNull(previousCoordinate))
+        {
+            throw new NullReferenceException("The game thinks your previous coordinate is null. Sorry this is a bug :>");
+        }
+
+        switch (movementToGetHere)
+        {
+            case Action.Up:
+                PlayerPosition.column = previousCoordinate.column;
+                PlayerPosition.row = Blocks.Length - 1;
+                break;
+            case Action.Down:
+                PlayerPosition.column = previousCoordinate.column;
+                PlayerPosition.row = 0;
+                break;
+            case Action.Left:
+                PlayerPosition.row = previousCoordinate.row;
+                PlayerPosition.column = Blocks[previousCoordinate.row.Value].Length - 1;
+                break;
+            case Action.Right:
+                PlayerPosition.row = previousCoordinate.row;
+                PlayerPosition.column = 0;
+                break;
+        }
+
     }
 
     /// <summary>
@@ -87,22 +124,73 @@ public class Map
     /// </summary>
     /// <param name="desiredDirection"></param>
     /// <returns></returns>
-    public bool WillCollide(int rowChange, int colChange)
+    public bool CanMakeTheMove(Action movement, out int newMapIndex, out int rowChange, out int colChange)
     {
-        if (PositionIsNull())
+        // default to current one
+        newMapIndex = MapIndex;
+
+        if (PositionIsNull(PlayerPosition))
         {
             throw new NullReferenceException("Player can't collide... the game thinks");
         }
 
-        char destination = Blocks[PlayerPosition.row!.Value + rowChange][PlayerPosition.column!.Value + colChange];
+        if (!Player.ActionIsMovement(movement))
+        {
+            throw new ArgumentException("CanMakeTheMove(): Action not movement");
+        }
 
-        // if it's not an "item", then it's a solid block
-        // if it's not an item -> player will collide
-        return !Terrains.SymbolToItem.ContainsKey(destination);
+
+        (rowChange, colChange) = movement switch
+        {
+            Action.Up => (-1, 0),
+            Action.Left => (0, -1),
+            Action.Down => (1, 0),
+            Action.Right => (0, 1),
+        };
+
+
+        try
+        {
+            char destination = Blocks[PlayerPosition.row!.Value + rowChange][PlayerPosition.column!.Value + colChange];
+
+            // if it's an item -> player can move into it
+            return Terrains.SymbolToItem.ContainsKey(destination);
+        }
+        catch (IndexOutOfRangeException)
+        {
+            // Case 1: Hitting the wall
+            if (HittingWallMovements[MapIndex].Contains(movement))
+            {
+                throw new SolidObjectCollisionException("Um... I cannot let you fall off the map");
+            }
+
+
+            // Case 2: Enter new map --> change mapIndex 
+            switch (movement)
+            {
+                case Action.Up:
+                    newMapIndex = MapIndex - 3;
+                    break;
+                case Action.Left:
+                    newMapIndex = MapIndex - 1;
+                    break;
+                case Action.Down:
+                    newMapIndex = MapIndex + 3;
+                    break;
+                case Action.Right:
+                    newMapIndex = MapIndex + 1;
+                    break;
+            }
+
+            // throw new NotImplementedException("Check Map.CanMakeTheMove() to Map switches");
+            return true;
+        }
+
+
     }
 
-    private bool PositionIsNull()
+    private static bool PositionIsNull((int?, int?) coords)
     {
-        return PlayerPosition.row == null || PlayerPosition.column == null;
+        return coords.Item1 == null || coords.Item2 == null;
     }
 }

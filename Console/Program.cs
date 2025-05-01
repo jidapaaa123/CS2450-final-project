@@ -2,14 +2,13 @@
 using Logic;
 
 GameManager manager = new(new Player("You"));
-int i = 4;
 
 string footerMessage = "";
 while (true)
 {
     Console.Clear();
-    UI.PrintScreenHeader(manager.Maps[i]);
-    UI.PrintMapDisplay(manager.Maps[i]);
+    UI.PrintScreenHeader(manager.Maps[manager.CurrentMapIndex]);
+    UI.PrintMapDisplay(manager.Maps[manager.CurrentMapIndex]);
     UI.PrintScreenFooter(footerMessage);
 
 

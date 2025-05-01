@@ -17,3 +17,21 @@ public class SolidObjectCollisionException : Exception
         
     }
 }
+
+public class GameBoundaryCollisionException : Exception
+{
+    public GameBoundaryCollisionException()
+    {
+
+    }
+
+    public GameBoundaryCollisionException(string message) : base(message)
+    {
+
+    }
+
+    public GameBoundaryCollisionException(string message, Exception inner) : base (message, inner)
+    {
+        
+    }
+}

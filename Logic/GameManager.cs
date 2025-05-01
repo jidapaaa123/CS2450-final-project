@@ -43,21 +43,39 @@ public class GameManager
 
     private void processMovement(Action movement)
     {
-        (int rowChange, int colChange) = movement switch
+        if (!Player.ActionIsMovement(movement))
         {
-            Action.Up => (-1, 0),
-            Action.Left => (0, -1),
-            Action.Down => (1, 0),
-            Action.Right => (0, 1),
-            _ => throw new ArgumentException("ProcessMovement(): Action not movement"),
-        };
+            throw new ArgumentException("ProcessMovement(): Action not movement");
+        }
 
-        if (Maps[CurrentMapIndex].WillCollide(rowChange, colChange))
+
+        //  TO-DO: handle map switches / boundary collisions
+        if (!Maps[CurrentMapIndex].CanMakeTheMove(movement, out int mapIndex, out int rowChange, out int colChange))
         {
             throw new SolidObjectCollisionException("Movement into solid object not allowed");
         }
 
-        Maps[CurrentMapIndex].Move(rowChange, colChange, out CurrentMapIndex);
+        // detect map changes
+        if (mapIndex != CurrentMapIndex)
+        {
+            (int?, int?) currentCoordinate = Maps[CurrentMapIndex].PlayerPosition;
+
+            // Player is no longer in old map:
+            Maps[CurrentMapIndex].PlayerPosition = (null, null);
+
+            // Player is in new map:
+            CurrentMapIndex = mapIndex;
+            Maps[CurrentMapIndex].PlayerEntersMap(currentCoordinate, movement);
+
+
+
+        }
+        else
+        {
+            Maps[CurrentMapIndex].Move(rowChange, colChange);
+        }
+
+
     }
 
 
