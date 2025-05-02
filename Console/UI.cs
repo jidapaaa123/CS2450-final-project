@@ -114,7 +114,7 @@ public class UI
 
             if (!fed)
             {
-                throw new CannotFeedCatException($"You don't have {manager.RequestedFood}!");
+                throw new CannotFeedCatException($"You don't have {manager.RequestedFood.ToString().Replace('_', ' ')}!");
             }
             else
             {
