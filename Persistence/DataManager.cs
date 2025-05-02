@@ -6,8 +6,8 @@ public enum Item
 {
     None = -1, Player, Seafood, Carne, Egg, Leche, Fruit, Vegetable, Water, Mineral, Rock,
     Flour, Bread, Steak, Fried_Chicken, Salt, Sugar, Sashimi,
-    Steak_Sandwich, Crispy_Chicken_Sandwich,
-    Waffle, Cornbread, Pancake, Fried_Fish
+    Steak_Sandwich, Crispy_Chicken_Sandwich, Noodles,
+    Waffle, Cornbread, Pancake, Fried_Fish, Garfield_Spaghetti, Raw_Egg_Water
 }
 public class DataManager
 {

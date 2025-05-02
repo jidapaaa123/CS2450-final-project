@@ -45,8 +45,6 @@ public class GameManager
             throw new ArgumentException("ProcessMovement(): Action not movement");
         }
 
-
-        //  TO-DO: handle map switches / boundary collisions
         if (!Maps[CurrentMapIndex].CanMakeTheMove(movement, out int mapIndex, out int rowChange, out int colChange))
         {
             throw new SolidObjectCollisionException("Movement into solid object not allowed");

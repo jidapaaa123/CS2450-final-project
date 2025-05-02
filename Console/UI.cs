@@ -131,15 +131,15 @@ public class UI
             Console.Clear();
             Console.WriteLine("KITCHEN");
 
-            // This line below is so unreadable but I'm not gonna refactor it
             Console.WriteLine($"Cat's Request: {manager.RequestedFood}");
             Console.WriteLine($"Inventory: {Player.NumberOfItemsAsString(manager.Player.GetAmountsOfItems())}");
-            Console.WriteLine("What'd you like to make?");
+            Console.WriteLine("\nWhat'd you like to make?");
 
             Console.WriteLine($"0. Nothing... I changed my mind");
             for (int i = 0; i < Kitchen.AllCraftables.Length; i++)
             {
                 Item item = Kitchen.AllCraftables[i];
+                // This line below is so unreadable but I'm not gonna refactor it
                 Console.WriteLine($"{i + 1}. {item.ToString().Replace('_', ' ')} ({Player.NumberOfItemsAsString(Player.OccurrencesOfItem(Kitchen.CraftableRecipes[item]))})");
             }
 
